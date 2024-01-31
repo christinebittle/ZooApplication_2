@@ -45,7 +45,9 @@ namespace ZooApplication.Controllers
                 AnimalID = Animal.AnimalID,
                 AnimalName = Animal.AnimalName,
                 AnimalWeight = Animal.AnimalWeight,
-                SpeciesName = Animal.Species.SpeciesName
+                SpeciesName = Animal.Species.SpeciesName,
+                SpeciesId = Animal.Species.SpeciesID
+
             };
             if (Animal == null)
             {
@@ -104,7 +106,7 @@ namespace ZooApplication.Controllers
             db.Animals.Add(animal);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = animal.AnimalID }, animal);
+            return CreatedAtRoute("FindAnimal", new { id = animal.AnimalID }, animal);
         }
 
         // POST: api/AnimalData/DeleteAnimal/5

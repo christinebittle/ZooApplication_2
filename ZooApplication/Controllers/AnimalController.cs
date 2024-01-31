@@ -109,18 +109,55 @@ namespace ZooApplication.Controllers
         // GET: Animal/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            //grab the animal information
+
+            //objective: communicate with our animal data api to retrieve one animal
+            //curl https://localhost:44324/api/animaldata/findanimal/{id}
+
+            string url = "findanimal/" + id;
+            HttpResponseMessage response = client.GetAsync(url).Result;
+
+            //Debug.WriteLine("The response code is ");
+            //Debug.WriteLine(response.StatusCode);
+
+            AnimalDto selectedanimal = response.Content.ReadAsAsync<AnimalDto>().Result;
+            //Debug.WriteLine("animal received : ");
+            //Debug.WriteLine(selectedanimal.AnimalName);
+
+            return View(selectedanimal);
         }
 
-        // POST: Animal/Edit/5
+        // POST: Animal/Update/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Update(int id, Animal animal)
         {
             try
             {
-                // TODO: Add update logic here
+                Debug.WriteLine("The new animal info is:");
+                Debug.WriteLine(animal.AnimalName);
+                Debug.WriteLine(animal.AnimalWeight);
+                Debug.WriteLine(animal.SpeciesID);
 
-                return RedirectToAction("Index");
+                //serialize into JSON
+                //Send the request to the API
+
+                string url = "UpdateAnimal/"+id;
+
+
+                string jsonpayload = jss.Serialize(animal);
+                Debug.WriteLine(jsonpayload);
+
+                HttpContent content = new StringContent(jsonpayload);
+                content.Headers.ContentType.MediaType = "application/json";
+
+                //POST: api/AnimalData/UpdateAnimal/{id}
+                //Header : Content-Type: application/json
+                HttpResponseMessage response = client.PostAsync(url, content).Result;
+
+                
+
+
+                return RedirectToAction("Details/"+id);
             }
             catch
             {
