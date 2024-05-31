@@ -106,7 +106,7 @@ namespace ZooApplication.Controllers
             db.Animals.Add(animal);
             db.SaveChanges();
 
-            return CreatedAtRoute("FindAnimal", new { id = animal.AnimalID }, animal);
+            return Ok();
         }
 
         // POST: api/AnimalData/DeleteAnimal/5
